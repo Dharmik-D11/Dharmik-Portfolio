@@ -108,7 +108,7 @@ const PROJECTS = [
     title: "STS-PCB Apps (Client & Supplier)",
     type: "Enterprise Apps",
     period: "2024 — Present",
-    tech: ["Kotlin", "Retrofit", "WebSockets", "Firebase", "Room"],
+    tech: ["Kotlin", "Retrofit", "WebSockets", "Firebase"],
     bullets: [
       " Engineered two enterprise-grade apps (Client & Supplier) enabling PCB inquiry registration, manufacturing  tracking, quotation management, and order lifecycle management",
       " Integrated WebSockets for real-time chat, implemented Firebase push notifications, and added secure payment gateway features.",
@@ -140,7 +140,7 @@ const PROJECTS = [
     title: "NFC Reader/Writer Application",
     type: "IoT",
     period: "2023",
-    tech: ["Kotlin", "NFC APIs"],
+    tech: ["Kotlin", "NFC APIs", "Room"],
     bullets: [
       "Designed and developed an NFC application for block-level memory read/write on NFC cards.",
       "Engineered offline data persistence using Room database, cutting average data retrieval times by 600ms and ensuring seamless application functionality regardless of network connectivity status for end-users.",
