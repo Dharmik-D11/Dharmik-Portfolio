@@ -188,7 +188,10 @@ const EXPERIENCE = [
 // UI Helpers
 // =============================
 const Section = ({ id, title, children }) => (
-  <section id={id} className="w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+  <section
+    id={id}
+    className="w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12 overflow-hidden"
+  >
     <motion.h2
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -207,7 +210,7 @@ const Pill = ({ children }) => (
   </span>
 );
 
-const Card = ({ children }) => (
+const Card = ({ children, className = "" }) => (
   <motion.div
     initial={{ opacity: 0, y: 12 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -216,7 +219,7 @@ const Card = ({ children }) => (
       boxShadow: "0 10px 25px rgba(0,0,0,0.4)",
     }}
     viewport={{ once: true }}
-    className="rounded-xl md:rounded-2xl shadow-md border border-slate-700 p-4 md:p-6 bg-slate-800 hover:bg-slate-700 transition"
+    className={`rounded-xl md:rounded-2xl shadow-md border border-slate-700 p-4 md:p-6 bg-slate-800 hover:bg-slate-700 transition ${className}`}
   >
     {children}
   </motion.div>
@@ -363,7 +366,7 @@ const MobileNav = ({ isOpen, onClose }) => {
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 100 }}
-      className="fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-md md:hidden flex items-center justify-center"
+      className="fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-md md:hidden flex items-center justify-center overflow-hidden"
     >
       <button
         onClick={onClose}
@@ -430,9 +433,9 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-slate-900 text-slate-200 overflow-x-hidden">
       {/* Nav */}
-      <nav className="sticky top-0 z-30 backdrop-blur-md bg-slate-900/90 border-b border-slate-700">
-        <div className="w-full px-4 md:px-6 flex items-center justify-between h-14">
-          <div className="font-bold text-xl md:text-2xl text-indigo-400">
+      <nav className="sticky top-0 z-30 backdrop-blur-md bg-slate-900/90 border-b border-slate-700 overflow-hidden">
+        <div className="w-full px-4 md:px-6 flex items-center justify-between h-14 max-w-full">
+          <div className="font-bold text-xl md:text-2xl text-indigo-400 truncate">
             {PROFILE.name}
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm">
@@ -484,14 +487,14 @@ export default function Portfolio() {
       {/* Hero / About */}
       <header
         id="about"
-        className="w-full px-4 md:px-6 pt-12 md:pt-16 pb-8 md:pb-12"
+        className="w-full px-4 md:px-6 pt-12 md:pt-16 pb-8 md:pb-12 overflow-hidden"
       >
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-8 items-start"
+          className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-8 items-start max-w-full"
         >
-          <div className="md:col-span-7">
+          <div className="md:col-span-7 max-w-full">
             <h1 className="text-2xl md:text-4xl font-bold text-indigo-400">
               {PROFILE.title}
             </h1>
@@ -512,7 +515,7 @@ export default function Portfolio() {
 
       {/* Skills */}
       <Section id="skills" title="Technical Skills">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-full">
           {SKILLS.map((group) => (
             <Card key={group.label}>
               <h4 className="font-semibold mb-3 text-indigo-400">
@@ -533,7 +536,7 @@ export default function Portfolio() {
 
       {/* Experience */}
       <Section id="experience" title="Work Experience">
-        <div className="flex justify-center">
+        <div className="flex justify-center max-w-full">
           <div className="max-w-3xl w-full">
             {EXPERIENCE.map((exp) => (
               <Card key={exp.company}>
@@ -556,7 +559,7 @@ export default function Portfolio() {
 
       {/* Projects Section */}
       <Section id="projects" title="Projects">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-full">
           {PROJECTS.map((p) => (
             <Card key={p.title} className="w-full">
               <h3 className="text-lg md:text-xl font-bold text-indigo-400">
@@ -578,14 +581,14 @@ export default function Portfolio() {
 
               {/* Media section */}
               {p.media.length > 0 && (
-                <div className="mt-2">
+                <div className="mt-2 max-w-full">
                   {/* Small screens → horizontal scroll */}
-                  <div className="flex space-x-2 overflow-x-auto pb-2 sm:hidden">
+                  <div className="flex space-x-2 overflow-x-auto pb-2 sm:hidden max-w-full">
                     {p.media.map((m, i) => (
                       <motion.div
                         key={i}
                         whileHover={{ scale: 1.05 }}
-                        className="w-32 h-24 bg-slate-700 rounded overflow-hidden cursor-pointer flex-shrink-0 flex items-center justify-center"
+                        className="w-32 h-24 bg-slate-700 rounded overflow-hidden cursor-pointer flex-shrink-0 flex items-center justify-center max-w-full"
                         onClick={() => openLightbox(m, p.media, i)}
                       >
                         {m.type === "image" ? (
@@ -604,12 +607,12 @@ export default function Portfolio() {
                   </div>
 
                   {/* Medium+ screens → uniform grid */}
-                  <div className="hidden sm:grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
+                  <div className="hidden sm:grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3 max-w-full">
                     {p.media.map((m, i) => (
                       <motion.div
                         key={i}
                         whileHover={{ scale: 1.05 }}
-                        className="w-full h-28 bg-slate-700 rounded overflow-hidden cursor-pointer flex items-center justify-center"
+                        className="w-full h-28 bg-slate-700 rounded overflow-hidden cursor-pointer flex items-center justify-center max-w-full"
                         onClick={() => openLightbox(m, p.media, i)}
                       >
                         {m.type === "image" ? (
@@ -640,7 +643,7 @@ export default function Portfolio() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="w-full"
+          className="w-full overflow-hidden"
         >
           <Card className="relative overflow-hidden">
             {/* Decorative elements */}
@@ -648,7 +651,7 @@ export default function Portfolio() {
             <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-indigo-400/10 rounded-full blur-xl"></div>
 
             <div className="relative z-10">
-              <div className="text-center mb-8">
+              <div className="text-center mb-8 px-4">
                 <h3 className="text-2xl font-bold text-indigo-400 mb-3">
                   Get In Touch
                 </h3>
@@ -659,31 +662,31 @@ export default function Portfolio() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 md:px-0 max-w-full">
                 {/* Contact Information */}
-                <div className="space-y-5">
-                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors">
+                <div className="space-y-5 max-w-full">
+                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors max-w-full">
                     <div className="p-2 bg-indigo-500/10 rounded-full flex-shrink-0">
                       <FaEnvelope className="text-indigo-400 text-lg" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <h4 className="font-semibold text-slate-200 mb-1">
                         Email
                       </h4>
                       <a
                         href={`mailto:${PROFILE.email}`}
-                        className="text-slate-300 hover:text-indigo-300 transition-colors"
+                        className="text-slate-300 hover:text-indigo-300 transition-colors break-words"
                       >
                         {PROFILE.email}
                       </a>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors">
+                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors max-w-full">
                     <div className="p-2 bg-indigo-500/10 rounded-full flex-shrink-0">
                       <FaPhoneAlt className="text-indigo-400 text-lg" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <h4 className="font-semibold text-slate-200 mb-1">
                         Phone
                       </h4>
@@ -696,11 +699,11 @@ export default function Portfolio() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors">
+                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors max-w-full">
                     <div className="p-2 bg-indigo-500/10 rounded-full flex-shrink-0">
                       <FaMapMarkerAlt className="text-indigo-400 text-lg" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <h4 className="font-semibold text-slate-200 mb-1">
                         Location
                       </h4>
@@ -708,11 +711,11 @@ export default function Portfolio() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors">
+                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors max-w-full">
                     <div className="p-2 bg-indigo-500/10 rounded-full flex-shrink-0">
                       <FaLinkedin className="text-indigo-400 text-lg" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <h4 className="font-semibold text-slate-200 mb-1">
                         LinkedIn
                       </h4>
@@ -720,7 +723,7 @@ export default function Portfolio() {
                         href={PROFILE.linkedin}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-slate-300 hover:text-indigo-300 transition-colors underline"
+                        className="text-slate-300 hover:text-indigo-300 transition-colors underline break-words"
                       >
                         Connect with me
                       </a>
@@ -729,7 +732,7 @@ export default function Portfolio() {
                 </div>
 
                 {/* Contact Form Placeholder */}
-                <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700">
+                <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700 max-w-full">
                   <h4 className="font-semibold text-slate-200 mb-4 text-center">
                     Send a Message
                   </h4>
@@ -746,29 +749,16 @@ export default function Portfolio() {
                         Send Email
                       </a>
                     </div>
-                    {/* <div className="text-center">
-                      <p className="text-slate-400 text-xs">
-                        Typically replies within 24 hours
-                      </p>
-                    </div> */}
                   </div>
                 </div>
               </div>
-
-              {/* Availability Status */}
-              {/* <div className="mt-8 pt-6 border-t border-slate-700">
-          <div className="flex items-center justify-center gap-2">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-sm text-slate-300">Currently available for freelance projects</span>
-          </div>
-        </div> */}
             </div>
           </Card>
         </motion.div>
       </Section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-700 py-6 text-center text-sm text-slate-400 w-full px-4">
+      <footer className="border-t border-slate-700 py-6 text-center text-sm text-slate-400 w-full px-4 overflow-hidden">
         <p>
           © {new Date().getFullYear()} {PROFILE.name}. All rights reserved.
         </p>
