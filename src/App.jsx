@@ -5,6 +5,7 @@ import homeImg from "./assets/home.jpg";
 import formImg from "./assets/form.jpg";
 import inquiryImg from "./assets/inquiry.jpg";
 import orderImg from "./assets/order.jpg";
+import profileImg from "./assets/profile.jpg";
 
 // =============================
 // Icons
@@ -29,9 +30,10 @@ import {
   FaPhoneAlt,
   FaMapMarkerAlt,
   FaLinkedin,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { FaNfcSymbol } from "react-icons/fa6";
-import { image } from "framer-motion/client";
 
 // =============================
 // Profile Info
@@ -121,6 +123,7 @@ const PROJECTS = [
       { type: "image", src: formImg },
       { type: "image", src: inquiryImg },
       { type: "image", src: orderImg },
+      { type: "image", src: profileImg },
       { type: "video", src: "/demo_vidoe_stspcb.mp4" },
     ],
   },
@@ -185,12 +188,12 @@ const EXPERIENCE = [
 // UI Helpers
 // =============================
 const Section = ({ id, title, children }) => (
-  <section id={id} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <section id={id} className="w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12">
     <motion.h2
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="text-3xl font-bold mb-8 text-indigo-400 text-center"
+      className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-indigo-400 text-center"
     >
       {title}
     </motion.h2>
@@ -199,7 +202,7 @@ const Section = ({ id, title, children }) => (
 );
 
 const Pill = ({ children }) => (
-  <span className="inline-flex items-center gap-2 rounded-full border border-indigo-500 bg-indigo-900/40 text-indigo-300 px-3 py-1 text-sm mr-2 mb-2">
+  <span className="inline-flex items-center gap-1 md:gap-2 rounded-full border border-indigo-500 bg-indigo-900/40 text-indigo-300 px-2 md:px-3 py-1 text-xs md:text-sm mr-2 mb-2">
     {children}
   </span>
 );
@@ -213,44 +216,194 @@ const Card = ({ children }) => (
       boxShadow: "0 10px 25px rgba(0,0,0,0.4)",
     }}
     viewport={{ once: true }}
-    className="rounded-2xl shadow-md border border-slate-700 p-6 bg-slate-800 hover:bg-slate-700 transition"
+    className="rounded-xl md:rounded-2xl shadow-md border border-slate-700 p-4 md:p-6 bg-slate-800 hover:bg-slate-700 transition"
   >
     {children}
   </motion.div>
 );
 
 // =============================
-// Lightbox
+// Lightbox with Navigation (Fixed)
 // =============================
-const Lightbox = ({ media, onClose }) => {
+const Lightbox = ({
+  media,
+  onClose,
+  allMedia,
+  currentIndex,
+  setCurrentIndex,
+}) => {
   if (!media) return null;
+
+  // Ensure allMedia is always an array, even if undefined
+  const mediaArray = allMedia || [media];
+  const safeCurrentIndex = currentIndex || 0;
+
+  // Navigation functions
+  const goToPrevious = (e) => {
+    if (e) e.stopPropagation();
+    if (mediaArray.length <= 1) return;
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? mediaArray.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNext = (e) => {
+    if (e) e.stopPropagation();
+    if (mediaArray.length <= 1) return;
+    setCurrentIndex((prevIndex) =>
+      prevIndex === mediaArray.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    const handleArrowKeys = (e) => {
+      if (mediaArray.length <= 1) return;
+      if (e.key === "ArrowLeft") goToPrevious();
+      if (e.key === "ArrowRight") goToNext();
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    document.addEventListener("keydown", handleArrowKeys);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("keydown", handleArrowKeys);
+      document.body.style.overflow = "unset";
+    };
+  }, [onClose, goToPrevious, goToNext, mediaArray.length]);
+
+  // Get current media based on index
+  const currentMedia = mediaArray[safeCurrentIndex] || media;
+
   return (
-    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
+      {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 bg-white text-black px-3 py-1 rounded shadow"
+        className="absolute top-4 right-4 bg-white text-black w-12 h-12 rounded-full shadow-lg flex items-center justify-center z-20 hover:bg-gray-200 transition-colors text-xl font-bold"
       >
-        ✕ Close
+        ✕
       </button>
-      <div className="max-w-5xl max-h-[90vh] w-full flex items-center justify-center">
-        {media.type === "image" && (
+
+      {/* Navigation Arrows - Only show if there are multiple media items */}
+      {mediaArray.length > 1 && (
+        <>
+          <button
+            onClick={goToPrevious}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white text-black w-16 h-16 rounded-full flex items-center justify-center z-20 hover:bg-gray-200 transition-all duration-200 text-4xl font-bold shadow-lg border-2 border-gray-300"
+          >
+            ‹
+          </button>
+          <button
+            onClick={goToNext}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white text-black w-16 h-16 rounded-full flex items-center justify-center z-20 hover:bg-gray-200 transition-all duration-200 text-4xl font-bold shadow-lg border-2 border-gray-300"
+          >
+            ›
+          </button>
+        </>
+      )}
+
+      {/* Media counter - Only show if there are multiple media items */}
+      {mediaArray.length > 1 && (
+        <div className="absolute top-4 left-4 bg-white text-black px-4 py-2 rounded-full text-md z-20 font-medium shadow-lg border border-gray-300">
+          {safeCurrentIndex + 1} / {mediaArray.length}
+        </div>
+      )}
+
+      {/* Content area - clicking here will NOT close the lightbox */}
+      <div
+        className="max-w-5xl max-h-[90vh] w-full flex items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {currentMedia.type === "image" && (
           <img
-            src={media.src}
-            alt=""
+            src={currentMedia.src}
+            alt="Project preview"
             className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-lg"
           />
         )}
-        {media.type === "video" && (
-          <iframe
-            className="w-full h-[70vh] rounded-lg shadow-lg"
-            src={media.src}
-            title="Video"
-            frameBorder="0"
-            allowFullScreen
-          ></iframe>
+        {currentMedia.type === "video" && (
+          <div className="w-full h-auto aspect-video">
+            <video
+              className="w-full h-full rounded-lg shadow-lg"
+              src={currentMedia.src}
+              controls
+              autoPlay
+            />
+          </div>
         )}
       </div>
-    </div>
+    </motion.div>
+  );
+};
+
+// =============================
+// Mobile Navigation
+// =============================
+const MobileNav = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  const handleNavClick = (id) => {
+    onClose();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+      className="fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-md md:hidden flex items-center justify-center"
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-6 right-6 text-2xl text-indigo-400"
+      >
+        <FaTimes />
+      </button>
+      <nav className="flex flex-col items-center gap-8 text-xl">
+        <button
+          onClick={() => handleNavClick("about")}
+          className="text-indigo-400 hover:text-indigo-300"
+        >
+          About
+        </button>
+        <button
+          onClick={() => handleNavClick("skills")}
+          className="text-indigo-400 hover:text-indigo-300"
+        >
+          Skills
+        </button>
+        <button
+          onClick={() => handleNavClick("experience")}
+          className="text-indigo-400 hover:text-indigo-300"
+        >
+          Experience
+        </button>
+        <button
+          onClick={() => handleNavClick("projects")}
+          className="text-indigo-400 hover:text-indigo-300"
+        >
+          Projects
+        </button>
+        <button
+          onClick={() => handleNavClick("contact")}
+          className="text-indigo-400 hover:text-indigo-300"
+        >
+          Contact
+        </button>
+      </nav>
+    </motion.div>
   );
 };
 
@@ -259,53 +412,94 @@ const Lightbox = ({ media, onClose }) => {
 // =============================
 export default function Portfolio() {
   const [lightbox, setLightbox] = useState(null);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const [currentProjectMedia, setCurrentProjectMedia] = useState([]);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
   }, []);
 
+  // Function to handle opening lightbox with proper context
+  const openLightbox = (media, mediaArray, index) => {
+    setLightbox(media);
+    setCurrentProjectMedia(mediaArray);
+    setCurrentMediaIndex(index);
+  };
+
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200">
+    <div className="min-h-screen bg-slate-900 text-slate-200 overflow-x-hidden">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/90 border-b border-slate-700">
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-14">
-          <div className="font-bold text-2xl text-indigo-400">
+      <nav className="sticky top-0 z-30 backdrop-blur-md bg-slate-900/90 border-b border-slate-700">
+        <div className="w-full px-4 md:px-6 flex items-center justify-between h-14">
+          <div className="font-bold text-xl md:text-2xl text-indigo-400">
             {PROFILE.name}
           </div>
-          <div className="hidden sm:flex items-center gap-6 text-sm">
-            <a href="#about" className="hover:text-indigo-400">
+          <div className="hidden md:flex items-center gap-6 text-sm">
+            <a
+              href="#about"
+              className="hover:text-indigo-400 transition-colors"
+            >
               About
             </a>
-            <a href="#skills" className="hover:text-indigo-400">
+            <a
+              href="#skills"
+              className="hover:text-indigo-400 transition-colors"
+            >
               Skills
             </a>
-            <a href="#experience" className="hover:text-indigo-400">
+            <a
+              href="#experience"
+              className="hover:text-indigo-400 transition-colors"
+            >
               Experience
             </a>
-            <a href="#projects" className="hover:text-indigo-400">
+            <a
+              href="#projects"
+              className="hover:text-indigo-400 transition-colors"
+            >
               Projects
             </a>
-            <a href="#contact" className="hover:text-indigo-400">
+            <a
+              href="#contact"
+              className="hover:text-indigo-400 transition-colors"
+            >
               Contact
             </a>
           </div>
+          <button
+            className="md:hidden text-indigo-400"
+            onClick={() => setMobileNavOpen(true)}
+          >
+            <FaBars size={20} />
+          </button>
         </div>
       </nav>
 
+      <MobileNav
+        isOpen={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+      />
+
       {/* Hero / About */}
-      <header id="about" className="max-w-6xl mx-auto px-6 pt-16 pb-12">
+      <header
+        id="about"
+        className="w-full px-4 md:px-6 pt-12 md:pt-16 pb-8 md:pb-12"
+      >
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid md:grid-cols-12 gap-8 items-start"
+          className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-8 items-start"
         >
           <div className="md:col-span-7">
-            <h1 className="text-4xl font-bold text-indigo-400">
+            <h1 className="text-2xl md:text-4xl font-bold text-indigo-400">
               {PROFILE.title}
             </h1>
-            <p className="mt-3 text-lg text-slate-300">{PROFILE.tagline}</p>
+            <p className="mt-3 text-base md:text-lg text-slate-300">
+              {PROFILE.tagline}
+            </p>
           </div>
-          <div className="md:col-span-5">
+          <div className="md:col-span-5 w-full">
             <Card>
               <h3 className="text-lg font-semibold mb-2 text-indigo-400">
                 About Me
@@ -318,7 +512,7 @@ export default function Portfolio() {
 
       {/* Skills */}
       <Section id="skills" title="Technical Skills">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {SKILLS.map((group) => (
             <Card key={group.label}>
               <h4 className="font-semibold mb-3 text-indigo-400">
@@ -327,7 +521,7 @@ export default function Portfolio() {
               <div className="flex flex-wrap">
                 {group.items.map((item) => (
                   <Pill key={item.name}>
-                    <span className="text-lg">{item.icon}</span>
+                    <span className="text-base md:text-lg">{item.icon}</span>
                     {item.name}
                   </Pill>
                 ))}
@@ -339,29 +533,35 @@ export default function Portfolio() {
 
       {/* Experience */}
       <Section id="experience" title="Work Experience">
-        <div className="grid md:grid-cols-1 gap-6 max-w-3xl mx-auto">
-          {EXPERIENCE.map((exp) => (
-            <Card key={exp.company}>
-              <h3 className="text-xl font-bold text-indigo-400">{exp.role}</h3>
-              <p className="text-sm text-slate-400 mb-3">
-                {exp.company} · {exp.period}
-              </p>
-              <ul className="list-disc pl-5 space-y-2 text-sm text-slate-300">
-                {exp.bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
-            </Card>
-          ))}
+        <div className="flex justify-center">
+          <div className="max-w-3xl w-full">
+            {EXPERIENCE.map((exp) => (
+              <Card key={exp.company}>
+                <h3 className="text-lg md:text-xl font-bold text-indigo-400">
+                  {exp.role}
+                </h3>
+                <p className="text-sm text-slate-400 mb-3">
+                  {exp.company} · {exp.period}
+                </p>
+                <ul className="list-disc pl-5 space-y-2 text-sm text-slate-300">
+                  {exp.bullets.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              </Card>
+            ))}
+          </div>
         </div>
       </Section>
 
-      {/* Projects */}
+      {/* Projects Section */}
       <Section id="projects" title="Projects">
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
           {PROJECTS.map((p) => (
-            <Card key={p.title}>
-              <h3 className="text-xl font-bold text-indigo-400">{p.title}</h3>
+            <Card key={p.title} className="w-full">
+              <h3 className="text-lg md:text-xl font-bold text-indigo-400">
+                {p.title}
+              </h3>
               <p className="text-sm text-slate-400 mb-2">
                 {p.type} · {p.period}
               </p>
@@ -370,31 +570,64 @@ export default function Portfolio() {
                   <Pill key={t}>{t}</Pill>
                 ))}
               </div>
-              <ul className="list-disc pl-5 space-y-2 text-sm/6 text-slate-300">
+              <ul className="list-disc pl-5 space-y-2 text-sm/6 text-slate-300 mb-4">
                 {p.bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
               </ul>
-              <div className="mt-4 flex space-x-2 overflow-x-auto pb-2">
-                {p.media.map((m, i) => (
-                  <motion.div
-                    key={i}
-                    whileHover={{ scale: 1.05 }}
-                    className="w-32 h-20 bg-slate-700 rounded overflow-hidden cursor-pointer flex items-center justify-center"
-                    onClick={() => setLightbox(m)}
-                  >
-                    {m.type === "image" ? (
-                      <img
-                        src={m.src}
-                        alt=""
-                        className="object-cover w-full h-full"
-                      />
-                    ) : (
-                      <span className="text-xs text-slate-300">▶ Video</span>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
+
+              {/* Media section */}
+              {p.media.length > 0 && (
+                <div className="mt-2">
+                  {/* Small screens → horizontal scroll */}
+                  <div className="flex space-x-2 overflow-x-auto pb-2 sm:hidden">
+                    {p.media.map((m, i) => (
+                      <motion.div
+                        key={i}
+                        whileHover={{ scale: 1.05 }}
+                        className="w-32 h-24 bg-slate-700 rounded overflow-hidden cursor-pointer flex-shrink-0 flex items-center justify-center"
+                        onClick={() => openLightbox(m, p.media, i)}
+                      >
+                        {m.type === "image" ? (
+                          <img
+                            src={m.src}
+                            alt="Project preview"
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <span className="text-xs text-slate-300">
+                            ▶ Video
+                          </span>
+                        )}
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Medium+ screens → uniform grid */}
+                  <div className="hidden sm:grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
+                    {p.media.map((m, i) => (
+                      <motion.div
+                        key={i}
+                        whileHover={{ scale: 1.05 }}
+                        className="w-full h-28 bg-slate-700 rounded overflow-hidden cursor-pointer flex items-center justify-center"
+                        onClick={() => openLightbox(m, p.media, i)}
+                      >
+                        {m.type === "image" ? (
+                          <img
+                            src={m.src}
+                            alt="Project preview"
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <span className="text-xs text-slate-300">
+                            ▶ Video
+                          </span>
+                        )}
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </Card>
           ))}
         </div>
@@ -407,37 +640,52 @@ export default function Portfolio() {
             Let’s connect! Reach out for collaborations, freelance projects, or
             just a quick hello.
           </p>
-          <div className="grid sm:grid-cols-2 gap-4 text-sm text-slate-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-300">
             <div className="flex items-center gap-3">
-              <FaEnvelope className="text-indigo-400" />
-              <span>{PROFILE.email}</span>
+              <FaEnvelope className="text-indigo-400 flex-shrink-0" />
+              <a href={`mailto:${PROFILE.email}`} className="truncate">
+                {PROFILE.email}
+              </a>
             </div>
             <div className="flex items-center gap-3">
-              <FaPhoneAlt className="text-indigo-400" />
-              <span>{PROFILE.phone}</span>
+              <FaPhoneAlt className="text-indigo-400 flex-shrink-0" />
+              <a href={`tel:${PROFILE.phone}`}>{PROFILE.phone}</a>
             </div>
             <div className="flex items-center gap-3">
-              <FaMapMarkerAlt className="text-indigo-400" />
+              <FaMapMarkerAlt className="text-indigo-400 flex-shrink-0" />
               <span>{PROFILE.location}</span>
             </div>
             <div className="flex items-center gap-3">
-              <FaLinkedin className="text-indigo-400" />
+              <FaLinkedin className="text-indigo-400 flex-shrink-0" />
               <a
-                className="underline"
+                className="underline truncate"
                 href={PROFILE.linkedin}
                 target="_blank"
                 rel="noreferrer"
               >
-                {PROFILE.linkedin}
+                LinkedIn Profile
               </a>
             </div>
           </div>
         </Card>
       </Section>
 
+      {/* Footer */}
+      <footer className="border-t border-slate-700 py-6 text-center text-sm text-slate-400 w-full px-4">
+        <p>
+          © {new Date().getFullYear()} {PROFILE.name}. All rights reserved.
+        </p>
+      </footer>
+
       {/* Lightbox */}
       {lightbox && (
-        <Lightbox media={lightbox} onClose={() => setLightbox(null)} />
+        <Lightbox
+          media={lightbox}
+          onClose={() => setLightbox(null)}
+          allMedia={currentProjectMedia}
+          currentIndex={currentMediaIndex}
+          setCurrentIndex={setCurrentMediaIndex}
+        />
       )}
     </div>
   );
