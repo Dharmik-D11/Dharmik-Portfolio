@@ -290,10 +290,10 @@ const Lightbox = ({
       className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
-      {/* Close button */}
+      {/* Close button - positioned with safe margins */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 bg-white text-black w-12 h-12 rounded-full shadow-lg flex items-center justify-center z-20 hover:bg-gray-200 transition-colors text-xl font-bold"
+        className="absolute top-4 right-4 bg-white text-black w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg flex items-center justify-center z-20 hover:bg-gray-200 transition-colors text-xl font-bold"
       >
         ✕
       </button>
@@ -304,20 +304,22 @@ const Lightbox = ({
           <button
             onClick={goToPrevious}
             className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 
-                 bg-white text-black w-12 h-12 sm:w-16 sm:h-16 
+                 bg-white/95 text-black w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14
                  rounded-full flex items-center justify-center 
                  z-20 hover:bg-gray-200 transition-all duration-200 
-                 text-3xl sm:text-4xl font-bold shadow-lg border-2 border-gray-300"
+                 text-2xl sm:text-3xl md:text-4xl font-bold shadow-lg border-2 border-gray-300
+                 mobile-touch-target"
           >
             ‹
           </button>
           <button
             onClick={goToNext}
             className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 
-                 bg-white text-black w-12 h-12 sm:w-16 sm:h-16 
+                 bg-white/95 text-black w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14
                  rounded-full flex items-center justify-center 
                  z-20 hover:bg-gray-200 transition-all duration-200 
-                 text-3xl sm:text-4xl font-bold shadow-lg border-2 border-gray-300"
+                 text-2xl sm:text-3xl md:text-4xl font-bold shadow-lg border-2 border-gray-300
+                 mobile-touch-target"
           >
             ›
           </button>
@@ -326,25 +328,29 @@ const Lightbox = ({
 
       {/* Media counter - Only show if there are multiple media items */}
       {mediaArray.length > 1 && (
-        <div className="absolute top-4 left-4 bg-white text-black px-4 py-2 rounded-full text-md z-20 font-medium shadow-lg border border-gray-300">
+        <div
+          className="absolute top-16 sm:top-4 left-1/2 transform -translate-x-1/2 
+            bg-white/95 text-black px-3 py-1 sm:px-4 sm:py-2 rounded-full text-sm sm:text-md z-20 
+            font-medium shadow-lg border border-gray-300 whitespace-nowrap"
+        >
           {safeCurrentIndex + 1} / {mediaArray.length}
         </div>
       )}
 
       {/* Content area - clicking here will NOT close the lightbox */}
       <div
-        className="max-w-5xl max-h-[90vh] w-full flex items-center justify-center"
+        className="max-w-5xl max-h-[80vh] sm:max-h-[90vh] w-full flex items-center justify-center mt-8 sm:mt-0"
         onClick={(e) => e.stopPropagation()}
       >
         {currentMedia.type === "image" && (
           <img
             src={currentMedia.src}
             alt="Project preview"
-            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-lg"
+            className="max-w-full max-h-[80vh] sm:max-h-[90vh] object-contain rounded-lg shadow-lg"
           />
         )}
         {currentMedia.type === "video" && (
-          <div className="w-full h-auto aspect-video">
+          <div className="w-full h-auto aspect-video max-h-[80vh] sm:max-h-[90vh]">
             <video
               className="w-full h-full rounded-lg shadow-lg"
               src={currentMedia.src}
@@ -354,6 +360,16 @@ const Lightbox = ({
           </div>
         )}
       </div>
+
+      {/* Add some custom styles for mobile optimization */}
+      <style jsx>{`
+        @media (max-width: 640px) {
+          .mobile-touch-target {
+            min-width: 44px;
+            min-height: 44px;
+          }
+        }
+      `}</style>
     </motion.div>
   );
 };
