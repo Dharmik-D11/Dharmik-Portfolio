@@ -303,13 +303,21 @@ const Lightbox = ({
         <>
           <button
             onClick={goToPrevious}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white text-black w-16 h-16 rounded-full flex items-center justify-center z-20 hover:bg-gray-200 transition-all duration-200 text-4xl font-bold shadow-lg border-2 border-gray-300"
+            className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 
+                 bg-white text-black w-12 h-12 sm:w-16 sm:h-16 
+                 rounded-full flex items-center justify-center 
+                 z-20 hover:bg-gray-200 transition-all duration-200 
+                 text-3xl sm:text-4xl font-bold shadow-lg border-2 border-gray-300"
           >
             ‹
           </button>
           <button
             onClick={goToNext}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white text-black w-16 h-16 rounded-full flex items-center justify-center z-20 hover:bg-gray-200 transition-all duration-200 text-4xl font-bold shadow-lg border-2 border-gray-300"
+            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 
+                 bg-white text-black w-12 h-12 sm:w-16 sm:h-16 
+                 rounded-full flex items-center justify-center 
+                 z-20 hover:bg-gray-200 transition-all duration-200 
+                 text-3xl sm:text-4xl font-bold shadow-lg border-2 border-gray-300"
           >
             ›
           </button>
