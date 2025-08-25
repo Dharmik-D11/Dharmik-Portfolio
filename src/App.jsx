@@ -635,39 +635,136 @@ export default function Portfolio() {
 
       {/* Contact */}
       <Section id="contact" title="Contact">
-        <Card>
-          <p className="mb-6 text-slate-300 text-sm text-center">
-            Let’s connect! Reach out for collaborations, freelance projects, or
-            just a quick hello.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-300">
-            <div className="flex items-center gap-3">
-              <FaEnvelope className="text-indigo-400 flex-shrink-0" />
-              <a href={`mailto:${PROFILE.email}`} className="truncate">
-                {PROFILE.email}
-              </a>
-            </div>
-            <div className="flex items-center gap-3">
-              <FaPhoneAlt className="text-indigo-400 flex-shrink-0" />
-              <a href={`tel:${PROFILE.phone}`}>{PROFILE.phone}</a>
-            </div>
-            <div className="flex items-center gap-3">
-              <FaMapMarkerAlt className="text-indigo-400 flex-shrink-0" />
-              <span>{PROFILE.location}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <FaLinkedin className="text-indigo-400 flex-shrink-0" />
-              <a
-                className="underline truncate"
-                href={PROFILE.linkedin}
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn Profile
-              </a>
-            </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="w-full"
+        >
+          <Card className="relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="absolute -top-10 -right-10 w-28 h-28 bg-indigo-500/10 rounded-full blur-xl"></div>
+            <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-indigo-400/10 rounded-full blur-xl"></div>
+
+            <div className="relative z-10">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold text-indigo-400 mb-3">
+                  Get In Touch
+                </h3>
+                <p className="text-slate-300 max-w-2xl mx-auto">
+                  Let's connect! Reach out for collaborations, freelance
+                  projects, or just a quick hello. I'm always open to discussing
+                  new opportunities and ideas.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Contact Information */}
+                <div className="space-y-5">
+                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors">
+                    <div className="p-2 bg-indigo-500/10 rounded-full flex-shrink-0">
+                      <FaEnvelope className="text-indigo-400 text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-200 mb-1">
+                        Email
+                      </h4>
+                      <a
+                        href={`mailto:${PROFILE.email}`}
+                        className="text-slate-300 hover:text-indigo-300 transition-colors"
+                      >
+                        {PROFILE.email}
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors">
+                    <div className="p-2 bg-indigo-500/10 rounded-full flex-shrink-0">
+                      <FaPhoneAlt className="text-indigo-400 text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-200 mb-1">
+                        Phone
+                      </h4>
+                      <a
+                        href={`tel:${PROFILE.phone}`}
+                        className="text-slate-300 hover:text-indigo-300 transition-colors"
+                      >
+                        {PROFILE.phone}
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors">
+                    <div className="p-2 bg-indigo-500/10 rounded-full flex-shrink-0">
+                      <FaMapMarkerAlt className="text-indigo-400 text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-200 mb-1">
+                        Location
+                      </h4>
+                      <span className="text-slate-300">{PROFILE.location}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800/70 transition-colors">
+                    <div className="p-2 bg-indigo-500/10 rounded-full flex-shrink-0">
+                      <FaLinkedin className="text-indigo-400 text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-200 mb-1">
+                        LinkedIn
+                      </h4>
+                      <a
+                        href={PROFILE.linkedin}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-slate-300 hover:text-indigo-300 transition-colors underline"
+                      >
+                        Connect with me
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Form Placeholder */}
+                <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700">
+                  <h4 className="font-semibold text-slate-200 mb-4 text-center">
+                    Send a Message
+                  </h4>
+                  <div className="space-y-4">
+                    <div className="bg-slate-800/50 rounded-lg p-4 text-center">
+                      <p className="text-slate-300 text-sm mb-3">
+                        Interested in working together?
+                      </p>
+                      <a
+                        href={`mailto:${PROFILE.email}?subject=Let's Work Together`}
+                        className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full transition-colors font-medium"
+                      >
+                        <FaEnvelope className="text-sm" />
+                        Send Email
+                      </a>
+                    </div>
+                    {/* <div className="text-center">
+                      <p className="text-slate-400 text-xs">
+                        Typically replies within 24 hours
+                      </p>
+                    </div> */}
+                  </div>
+                </div>
+              </div>
+
+              {/* Availability Status */}
+              {/* <div className="mt-8 pt-6 border-t border-slate-700">
+          <div className="flex items-center justify-center gap-2">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-sm text-slate-300">Currently available for freelance projects</span>
           </div>
-        </Card>
+        </div> */}
+            </div>
+          </Card>
+        </motion.div>
       </Section>
 
       {/* Footer */}
