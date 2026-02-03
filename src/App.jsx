@@ -7,6 +7,13 @@ import inquiryImg from "./assets/inquiry.jpg";
 import orderImg from "./assets/order.jpg";
 import profileImg from "./assets/profile.jpg";
 
+import loginImg from "./assets/login.jpeg";
+import modulesImg from "./assets/modules.jpeg";
+import attandanceImg from "./assets/attandance.jpeg";
+import holidayImg from "./assets/holiday.jpeg";
+import leaveImg from "./assets/leave_form.jpeg";
+import travelImg from "./assets/travel_request.jpeg";
+
 // =============================
 // Icons
 // =============================
@@ -108,8 +115,6 @@ const SKILLS = [
 const PROJECTS = [
   {
     title: "STS-PCB Apps (Client & Supplier)",
-    type: "Enterprise Apps",
-    period: "2024 — Present",
     tech: ["Kotlin", "Retrofit", "WebSockets", "Firebase"],
     bullets: [
       " Engineered two enterprise-grade apps (Client & Supplier) enabling PCB inquiry registration, manufacturing  tracking, quotation management, and order lifecycle management",
@@ -128,21 +133,26 @@ const PROJECTS = [
     ],
   },
   {
-    title: "USB Glucometer SDK",
-    type: "Medical Device SDK",
-    period: "2024",
-    tech: ["Kotlin", "USB Host API", "AAR SDK"],
+    title: "HR Management Application",
+    tech: ["Kotlin", "Google Maps"],
     bullets: [
-      "Built an Android app integrating USB modules to connect with a medical glucometer, enabling real-time data read/write operations.",
-      "Developed and published a client-ready SDK (AAR library) hosted on Maven/JitPack for seamless third-party integration.",
-      "Improved data transfer stability and reduced latency by optimizing USB serial communication handlers.",
+      "Developed an enterprise-grade Android HR Management application covering Leave & Waiver Management, Attendance, Payroll, and Travel Allowance workflows with role-based approvals (Employee → HR → Management).",
+      "Implemented Payroll and HR dashboards providing real-time visibility into attendance, holidays, leaves, salary components, and travel expenses, enabling data-driven HR decisions.",
+      "Integrated Google Maps SDK, Places API, Directions API, and accurate travel allowance calculation.",
+      "Delivered a scalable, user-friendly Android UI with automated calculations, audit trails, and summary reporting, significantly reducing manual HR operations.",
     ],
-    media: [],
+    media: [
+      { type: "image", src: loginImg },
+      { type: "image", src: modulesImg },
+      { type: "image", src: attandanceImg },
+      { type: "image", src: holidayImg },
+      { type: "image", src: leaveImg },
+      { type: "image", src: travelImg },
+      { type: "video", src: "/demo_video_hr.mp4" },
+    ],
   },
   {
     title: "NFC Reader/Writer Application",
-    type: "IoT",
-    period: "2023",
     tech: ["Kotlin", "NFC APIs", "Room"],
     bullets: [
       "Designed and developed an NFC application for block-level memory read/write on NFC cards.",
@@ -153,8 +163,6 @@ const PROJECTS = [
   },
   {
     title: "Bluetooth Device Controller",
-    type: "IoT Device App",
-    period: "2023",
     tech: ["Kotlin", "Bluetooth Classic & BLE"],
     bullets: [
       "Developed a peer-to-peer communication app using Classic Bluetooth supporting text, audio, video, and document exchange.",
@@ -172,7 +180,7 @@ const EXPERIENCE = [
   {
     company: "Leons Integration Pvt. Ltd.",
     role: "Mobile App Developer",
-    period: "Jan 2024 — Present",
+    period: "Jan 2024 — Dec 2025",
     bullets: [
       "Develop, test, and maintain Android applications in Kotlin with focus on performance, scalability, and clean code practices.",
       "Collaborate with cross-functional teams (backend, hardware engineers, QA) to deliver production-ready apps.",
@@ -586,12 +594,9 @@ export default function Portfolio() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-full">
           {PROJECTS.map((p) => (
             <Card key={p.title} className="w-full">
-              <h3 className="text-lg md:text-xl font-bold text-indigo-400">
+              <h3 className="text-lg md:text-xl font-bold text-indigo-400 mb-3">
                 {p.title}
               </h3>
-              <p className="text-sm text-slate-400 mb-2">
-                {p.type} · {p.period}
-              </p>
               <div className="flex flex-wrap mb-3">
                 {p.tech.map((t) => (
                   <Pill key={t}>{t}</Pill>
